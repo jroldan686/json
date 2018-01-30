@@ -5,6 +5,7 @@ package acdat.jroldan.json;
  */
 
 public class Telefono {
+
     private String casa;
     private String movil;
     private String trabajo;

@@ -7,14 +7,13 @@
     tools:context="acdat.jroldan.json.PrimitivaActivity">
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/btnDescargar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Button" />
+        android:text="Descargar" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/txvDatos"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:layout_height="wrap_content" />
 </LinearLayout>

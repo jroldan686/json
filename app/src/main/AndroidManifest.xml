@@ -20,7 +20,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".PrimitivaActivity" />
-        <activity android:name=".ListaContactosActivity"></activity>
+        <activity android:name=".ListaContactosActivity" />
+        <activity android:name=".ListaContactosGsonActivity" />
+        <activity android:name=".CrearJSONActivity"></activity>
     </application>
 
 </manifest>

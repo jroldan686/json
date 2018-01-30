@@ -8,7 +8,7 @@ import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button btnPrimitiva;
+    Button btnPrimitiva, btnListaContactos;
     Intent i;
 
     @Override
@@ -21,6 +21,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 i = new Intent(MainActivity.this, PrimitivaActivity.class);
+                startActivity(i);
+            }
+        });
+
+        btnListaContactos = (Button)findViewById(R.id.btnListaContactos);
+        btnListaContactos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                i = new Intent(MainActivity.this, ListaContactosActivity.class);
                 startActivity(i);
             }
         });

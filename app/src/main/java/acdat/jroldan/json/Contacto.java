@@ -5,10 +5,12 @@ package acdat.jroldan.json;
  */
 
 public class Contacto {
+
     private String nombre;
     private String direccion;
     private String email;
     private Telefono telefono;
+
     public String getNombre() { return nombre; }
     public void setNombre(String nombre) {
         this.nombre = nombre;

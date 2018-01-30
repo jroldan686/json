@@ -11,4 +11,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Primitiva" />
+
+    <Button
+        android:id="@+id/btnListaContactos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Lista de contactos" />
 </LinearLayout>
