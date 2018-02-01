@@ -11,29 +11,41 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.loopj.android.http.JsonHttpResponseHandler;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class ListaContactosGsonActivity extends Activity implements View.OnClickListener, AdapterView.OnItemClickListener {
-    public static final String WEB = "http://192.168.1.20/acceso/contacts.json";
-    //public static final String WEB = "https://www.portadaalta.mobi/acceso/contacts.json";
+import cz.msebera.android.httpclient.Header;
+
+public class ListaContactosGsonActivity extends Activity implements View.OnClickListener {
+    //public static final String WEB = "http://192.168.3.57/acceso/contacts.json";
+    public static final String WEB = "https://www.portadaalta.mobi/acceso/contacts.json";
     Button boton;
     ListView lista;
-    ArrayList<Contact> contacts;
-    ArrayAdapter<Contact> adapter;
-    Person person;
-    Gson gson;
+    ArrayAdapter<Contacto> adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_lista_contactos);
-        boton = (Button) findViewById(R.id.button);
+        setContentView(R.layout.activity_lista_contactos_gson);
+        boton = findViewById(R.id.btnDescargar);
         boton.setOnClickListener(this);
-        lista = (ListView) findViewById(R.id.listView);
-        lista.setOnItemClickListener(this);
-        contacts = new ArrayList<Contact>();
+        lista = findViewById(R.id.lsvContactos);
+        lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapter, View view, int position, long id) {
+                Toast.makeText(
+                        ListaContactosGsonActivity.this,
+                        "Móvil: " + ((Contacto)adapter.getItemAtPosition(position)).getTelefono().getMovil(),
+                        Toast.LENGTH_SHORT
+                ).show();
+            }
+        });
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, new ArrayList<Contacto>());
+        lista.setAdapter(adapter);
     }
 
     @Override
@@ -44,7 +56,7 @@ public class ListaContactosGsonActivity extends Activity implements View.OnClick
 
     private void descarga(String web) {
         final ProgressDialog progreso = new ProgressDialog(this);
-        RestClient.get(WEB, new JsonHttpResponseHandler() {
+        RestClient.get(web, new JsonHttpResponseHandler() {
             @Override
             public void onStart() {
                 super.onStart();
@@ -53,27 +65,31 @@ public class ListaContactosGsonActivity extends Activity implements View.OnClick
                 progreso.setCancelable(true);
                 progreso.show();
             }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                super.onSuccess(statusCode, headers, response);
+                progreso.dismiss();
+
+                try {
+                    Gson gson = new GsonBuilder().create();
+                    Person personas = gson.fromJson(String.valueOf(response), Person.class);
+                    adapter.clear();
+                    ArrayList<Contacto> contactos = personas.getContactos();
+                    adapter.addAll(contactos);
+                } catch (Exception e) {
+                    Toast.makeText(getApplicationContext(), "Error en Gson: " + statusCode + "\n" + e.getMessage(), Toast.LENGTH_LONG).show();
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+                progreso.dismiss();
+                Toast.makeText(getApplicationContext(), "Error: " + statusCode + "\n" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
+            }
         });
     }
 
-    private void mostrar() {
-        if (person != null) {
-            contacts.clear();
-            contacts.addAll(person.getContactos());
-            if (adapter == null) {
-                adapter = new ArrayAdapter<Contact>(this, android.R.layout.simple_list_item_1, contacts);
-                lista.setAdapter(adapter);
-            } else {
-                adapter.clear();
-                adapter.addAll(contacts);
-            }
-        } else
-            Toast.makeText(getApplicationContext(), "Error al crear la lista", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Toast.makeText(this, "Móvil: " + contacts.get(position).getTelefono().getMovil(),
-                Toast.LENGTH_SHORT).show();
-    }
 }

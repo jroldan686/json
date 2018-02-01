@@ -5,7 +5,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-public class CreacionJsonActivity extends Activity implements View.OnClickListener {
+import java.util.ArrayList;
+
+public class CrearJsonActivity extends Activity implements View.OnClickListener {
     public static final String WEB = "http://www.alejandrosuarez.es/feed/";
     //public static final String WEB = "http://192.168.2.110/acceso/alejandro.rss";
     public static final String RESULTADO_JSON = "resultado.json";
@@ -17,7 +19,7 @@ public class CreacionJsonActivity extends Activity implements View.OnClickListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_crear_json);
-        boton = (Button) findViewById(R.id.button);
+        boton = (Button) findViewById(R.id.btnDescargar);
         boton.setOnClickListener(this);
     }
     @Override

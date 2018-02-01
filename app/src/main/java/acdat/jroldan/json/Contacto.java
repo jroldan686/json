@@ -1,5 +1,7 @@
 package acdat.jroldan.json;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by usuario on 25/01/18.
  */
