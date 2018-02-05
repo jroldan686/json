@@ -54,6 +54,10 @@ public class ListaContactosGsonActivity extends Activity implements View.OnClick
             descarga(WEB);
     }
 
+    private void showMessage(String s) {
+        Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
+    }
+
     private void descarga(String web) {
         final ProgressDialog progreso = new ProgressDialog(this);
         RestClient.get(web, new JsonHttpResponseHandler() {
@@ -87,7 +91,30 @@ public class ListaContactosGsonActivity extends Activity implements View.OnClick
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 super.onFailure(statusCode, headers, throwable, errorResponse);
                 progreso.dismiss();
-                Toast.makeText(getApplicationContext(), "Error: " + statusCode + "\n" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "Error: " + statusCode + "\n" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
+
+                StringBuilder message = new StringBuilder();
+                message.append("Fallo en la descarga");
+                if(throwable != null) {
+                    message.append("; " + statusCode + "\n" + throwable.getMessage());
+                    if(errorResponse != null)
+                        message.append("\n" + errorResponse.toString());
+                }
+                showMessage(message.toString());
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                super.onFailure(statusCode, headers, responseString, throwable);
+                progreso.dismiss();
+
+                StringBuilder message = new StringBuilder();
+                message.append("Fallo en la descarga");
+                if(throwable != null) {
+                    message.append("; " + statusCode + "\n" + throwable.getMessage());
+                    if(responseString != null)
+                        message.append("\n" + responseString.toString());
+                }
             }
         });
     }

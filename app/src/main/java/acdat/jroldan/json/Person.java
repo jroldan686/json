@@ -1,5 +1,8 @@
 package acdat.jroldan.json;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 import java.util.ArrayList;
 
 /**
@@ -8,6 +11,8 @@ import java.util.ArrayList;
 
 class Person {
 
+    @SerializedName("contacts")
+    @Expose
     private ArrayList<Contacto> contactos;
     private ArrayList<Telefono> telefonos;
 

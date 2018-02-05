@@ -1,5 +1,6 @@
 package acdat.jroldan.json;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -8,9 +9,18 @@ import com.google.gson.annotations.SerializedName;
 
 public class Contacto {
 
+
+    @SerializedName("name")
+    @Expose
     private String nombre;
+    @SerializedName("address")
+    @Expose
     private String direccion;
+    @SerializedName("email")
+    @Expose
     private String email;
+    @SerializedName("phone")
+    @Expose
     private Telefono telefono;
 
     public String getNombre() { return nombre; }
