@@ -22,7 +22,8 @@
         <activity android:name=".PrimitivaActivity" />
         <activity android:name=".ListaContactosActivity" />
         <activity android:name=".ListaContactosGsonActivity" />
-        <activity android:name=".CrearJSONActivity"></activity>
+        <activity android:name=".CrearJSONActivity" />
+        <activity android:name=".RepositoriosActivity"></activity>
     </application>
 
 </manifest>
