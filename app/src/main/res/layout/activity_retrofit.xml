@@ -4,21 +4,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="acdat.jroldan.json.RepositoriosActivity">
+    tools:context="acdat.jroldan.json.RetrofitActivity">
 
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
+    <EditText
+        android:id="@+id/edtUserName"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="User name:" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/btnDownload"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Button" />
+        android:text="Download" />
 
     <android.support.v7.widget.RecyclerView
+        android:id="@+id/rcvRepositories"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </LinearLayout>
