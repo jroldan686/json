@@ -3,7 +3,7 @@ package acdat.jroldan.json;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Git {
+public class Repos {
 
     @SerializedName("id")
     @Expose

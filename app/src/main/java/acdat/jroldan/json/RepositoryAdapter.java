@@ -14,17 +14,17 @@ import java.util.ArrayList;
 
 public class RepositoryAdapter extends RecyclerView.Adapter<RepositoryAdapter.ViewHolder> {
 
-    private ArrayList<Git> mRepos;
+    private ArrayList<Repos> mRepos;
 
     public RepositoryAdapter() {
         this.mRepos = new ArrayList<>();
     }
 
-    public Git get(int position) {
+    public Repos get(int position) {
         return mRepos.get(position);
     }
 
-    public void set(ArrayList<Git> repos) {
+    public void set(ArrayList<Repos> repos) {
         this.mRepos = repos;
         notifyDataSetChanged();
     }

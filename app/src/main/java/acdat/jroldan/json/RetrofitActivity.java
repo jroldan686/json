@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -26,6 +27,8 @@ public class RetrofitActivity extends AppCompatActivity {
     Button botonDescarga;
     RecyclerView rvRepos;
     private RepositoryAdapter adapter;
+    ApiService apiService;
+    ArrayList<Repos> repos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +47,8 @@ public class RetrofitActivity extends AppCompatActivity {
                     public void onClick(View view, final int position) {
                         Toast.makeText(getApplicationContext(), "position " + position + " was clicked!",
                                 Toast.LENGTH_SHORT).show();
-                        Uri uri = Uri.parse(adapter.get(position).getUrl());
+                        //Uri uri = Uri.parse(adapter.get(position).getUrl());
+                        Uri uri = Uri.parse(adapter.get(position).getHtmlUrl());
                         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                         if (intent.resolveActivity(getPackageManager()) != null)
                             startActivity(intent);
@@ -60,9 +64,7 @@ public class RetrofitActivity extends AppCompatActivity {
                                 Toast.LENGTH_LONG).show();
                     }
                 }));
-    }
 
-    public void onClick(View view) {
         Retrofit.Builder builder = new Retrofit.Builder()
                 .baseUrl(API_BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create());
@@ -72,25 +74,68 @@ public class RetrofitActivity extends AppCompatActivity {
                 .build();
 
         // Create a very simple REST adapter which points the GitHub API endpoint.
-        Git client = retrofit.create(Git.class);
+        Repos client = retrofit.create(Repos.class);
 
         // Fetch a list of the Github repositories.
-        Call<List<Git>> call = client.reposForUser("fs-opensource");
+        Call<List<Repos>> call = client.reposForUser("fs-opensource");
 
         // Execute the call asynchronously. Get a positive or negative callback.
-        call.enqueue(new Callback<List<Git>>() {
+        call.enqueue(new Callback<List<Repos>>() {
             @Override
-            public void onResponse(Call<List<Git>> call, Response<List<Git>> response) {
+            public void onResponse(Call<List<Repos>> call, Response<List<Repos>> response) {
                 // The network call was a success and we got a response
                 // TODO: use the repository list and display it
             }
 
             @Override
-            public void onFailure(Call<List<Git>> call, Throwable t) {
+            public void onFailure(Call<List<Repos>> call, Throwable t) {
                 // the network call was a failure
                 // TODO: handle error
             }
         });
+    }
 
+    private void showMessage(String s) {
+        Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
+    }
+
+    public void onClick(View view) {
+        if(view == botonDescarga) {
+            String username = nombreUsuario.getText().toString();
+            if(username.isEmpty())
+                showMessage("Debe dar un nombre");
+            else {
+                Call<ArrayList<Repos>> call = apiService.listRepos(username);
+                call.enqueue(new Callback<ArrayList<Repos>>() {
+                    @Override
+                    public void onResponse(Call<ArrayList<Repos>> call, Response<ArrayList<Repos>> response) {
+                        //int statusCode = response.code();
+                        //User user = response.body();
+                        //quitar cuadro de progreso
+                        if(response.isSuccessful()) {
+                            repos = response.body();
+                            adapter.set(repos);
+                            showMessage("Repositorios actualizados ok");
+                        }
+                        else {
+                            StringBuilder message = new StringBuilder();
+                            message.append("Error en la descarga: " + response.code());
+                            if(response.body() != null)
+                                message.append(response.body());
+                            if(response.errorBody() != null)
+                                message.append(response.errorBody());
+                            showMessage(message.toString());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ArrayList<Repos>> call, Throwable t) {
+                        //quitar cuadro de progreso
+                        if(t != null)
+                            showMessage("Fallo en la comunicación: " + t.getMessage());
+                    }
+                });
+            }
+        }
     }
 }
